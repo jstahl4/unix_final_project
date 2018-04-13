@@ -1,1 +1,2 @@
-cat status.txt | tr "\n" "|" | grep -o "<subway>.*</subway>" | tr "|" "\n"
+cat status.txt | tr "\n" "|" | grep -o "<subway>.*</subway>" | tr "|" "\n" > subways.txt
+
