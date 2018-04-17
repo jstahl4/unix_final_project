@@ -21,6 +21,7 @@ num_box_cols=4
 # box spacing
 margin=2
 padding=2
+textPadding=2
 
 # window size
 window_height=`tput lines`
@@ -42,7 +43,7 @@ start_position=$(($margin))
 # function to output the info
 output() {
 	# move cursor
-	tput cup $cursor_row $cursor_col
+	tput cup $(($cursor_row + $textPadding * 1/2)) $(($cursor_col + $textPadding))
 
 	# output info
 	echo $1
