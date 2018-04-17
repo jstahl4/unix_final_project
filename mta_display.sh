@@ -1,12 +1,14 @@
+trap 'tput setab 0; tput setaf 7; clear; exit;' SIGINT SIGQUIT SIGTERM
+
 # color functions
 red() {
-	tput setab 1; tput setaf 7
+	tput setab 1; tput setaf 0
 }
 yellow() {
-	tput setab 3; tput setaf 7
+	tput setab 3; tput setaf 0
 }
 green() {
-	tput setab 2; tput setaf 7
+	tput setab 2; tput setaf 0
 }
 reset() {
 	tput setab 0; tput setaf 7;
@@ -18,7 +20,7 @@ num_box_cols=4
 
 # box spacing
 margin=2
-padding=1
+padding=2
 
 # window size
 window_height=`tput lines`
@@ -32,10 +34,10 @@ box_width=$(($box_width / $num_box_cols))
 
 # how far to move cursor to next box
 width_increment=$(($box_width + $padding))
-height_increment=$(($box_height + $padding))
+height_increment=$(($box_height + $padding * 1/2))
 
 # starting cursor position
-start_position=$margin
+start_position=$(($margin))
 
 # function to output the info
 output() {
@@ -71,20 +73,25 @@ write_info() {
 	cursor_col=$current_col
 
 	# set background
-	#if (( $(echo "$change > 0" | bc) )); then
-	green
-	#elif (( $(echo "$change < 0" | bc) )); then
-	#	red
-	#else
-	#	yellow
-	#fi
+	if [ "$status" == "GOOD SERVICE" ]
+	then
+		green
+	else
+		if [ "$status" == "DELAYS" ]
+		then
+			red
+		else
+			yellow
+		fi
+	fi
 
 	# output colored background
 	draw_background
 
 	# output all info
-	output "`echo $line`"
-	output "`echo $status`"
+	output "$line"
+	output "$status"
+	output "Press F$fKey for more info"
 
 	# reset background
 	reset
@@ -94,12 +101,20 @@ clear
 while true
 do
 	# reset coordinates
-        current_row=$start_position
+        current_row=$(($start_position + 2)) #reset + 2 to account for timestamp
         current_col=$start_position
-
+	
+	wget -qO- http://web.mta.info/status/serviceStatus.txt > mta.txt
+	timestamp=`cat mta.txt | grep timestamp | cut -d ">" -f5 | cut -d "<" -f1`
 	cat mta.txt | tr "\n" "|" | grep -o "<subway>.*</subway>" | tr "|" "\n" > subways.txt
 	cat subways.txt | grep "<line>" -A 2 | cut -d ">" -f2 | cut -d "<" -f1 | grep '\S' | grep -v "^--$" > lines_status.txt 
+	
 	i=1
+	fKey=1
+	
+	tput cup $(($margin)) $(($margin))
+	echo "Last updated: $timestamp"
+
 	while [ $i -le `wc -l < lines_status.txt` ]
 	do
 		line=`awk -v i=$i 'NR==i' < lines_status.txt`
@@ -114,6 +129,7 @@ do
         	fi
 
 		i=$((i + 2))
+		fKey=$((fKey + 1))
 	done
 	sleep 5
 done
