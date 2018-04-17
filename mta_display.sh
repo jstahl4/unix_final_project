@@ -132,5 +132,8 @@ do
 		i=$((i + 2))
 		fKey=$((fKey + 1))
 	done
+
+	# Reset the cursor position
+	tput cup $window_height $window_width
 	sleep 5
 done
