@@ -1,5 +1,5 @@
 # it's a trap!
-trap 'rm s1.xml; rm s2.html; rm info.txt; rm s3.html; rm mta.txt; rm subways.txt; rm lines_status.txt; tput setab 0; tput setaf 7; clear; stty sane; exit;' SIGINT SIGQUIT SIGTERM
+trap 'rm status.txt; rm s1.xml; rm s2.html; rm info.txt; rm s3.html; rm mta.txt; rm subways.txt; rm lines_status.txt; tput setab 0; tput setaf 7; clear; stty sane; exit;' SIGINT SIGQUIT SIGTERM
 
 # set the terminal mode to allow for non-blocking input
 # also don't want to echo any characters
@@ -132,7 +132,7 @@ check_for_keypress() {
 	then
 		
 		# the user has decided to quit
-		rm s1.xml; rm s2.html; rm info.txt; rm s3.html; rm mta.txt; rm subways.txt; rm lines_status.txt;
+		rm s1.xml; rm s2.html; rm info.txt; rm s3.html; rm mta.txt; rm subways.txt; rm lines_status.txt; rm status.txt;
 		tput setab 0; tput setaf 7; clear; stty sane; exit;		
 	else
 
