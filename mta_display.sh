@@ -1,4 +1,6 @@
-trap 'tput setab 0; tput setaf 7; clear; exit;' SIGINT SIGQUIT SIGTERM
+trap 'tput setab 0; tput setaf 7; clear; stty echo sane; exit;' SIGINT SIGQUIT SIGTERM
+
+stty -echo -icanon time 0 min 0
 
 # color functions
 red() {
@@ -13,6 +15,9 @@ green() {
 reset() {
 	tput setab 0; tput setaf 7;
 }
+
+# how long to pause for, in centiseconds
+delay=500
 
 # box array dimensions
 num_box_rows=3
@@ -92,10 +97,49 @@ write_info() {
 	# output all info
 	output "$line"
 	output "$status"
-	output "Press F$fKey for more info"
+	output "Press $fKey for more info"
 
 	# reset background
 	reset
+}
+
+#function that checks for keypress
+override=0
+check_for_keypress() {
+	status_html=""
+	read input
+	if ! [[ -z $input ]]
+	then
+		line=${lines[$input]}
+		if ! [[ -z $line ]]
+		then
+			cat subways.txt | grep $line -B 1 -A 10000 | sed -n '/<line>/,/<\/line>/p;/<\/line>/q' > s1.xml
+			cat s1.xml | sed -n '/<text>/,/<\/text>/p' | cut -d ">" -f2 | cut -d "<" -f1 > s2.html
+			echo Nothing to report! > info.txt
+			if [[ `cat s2.html | wc -l` -ge 1 ]]
+			then
+				#cat s2 | perl -MHTML::Entities -pe 'decode_entities($_);' > s3
+				lynx --dump s2.html > s3.html	
+				lynx --dump s3.html > info.txt
+				#echo `echo $status_html | perl -MHTML::Entities -pe 'decode_entities($_);'`
+			fi
+			echo >> info.txt
+			echo [PRESS Q TO EXIT] >> info.txt
+			reset
+			clear
+			#echo "$(<s4.html)"
+			less info.txt
+			#read cancel
+			#while [[ -z $cancel ]]
+			#do
+			#	read cancel
+			#	sleep 0.01
+			#done
+			#clear
+			#reset
+			override=1
+		fi
+	fi
 }
 
 clear
@@ -104,7 +148,8 @@ do
 	# reset coordinates
         current_row=$(($start_position + 2)) #reset + 2 to account for timestamp
         current_col=$start_position
-	
+	override=0
+
 	wget -qO- http://web.mta.info/status/serviceStatus.txt > mta.txt
 	timestamp=`cat mta.txt | grep timestamp | cut -d ">" -f5 | cut -d "<" -f1`
 	cat mta.txt | tr "\n" "|" | grep -o "<subway>.*</subway>" | tr "|" "\n" > subways.txt
@@ -112,6 +157,7 @@ do
 	
 	i=1
 	fKey=1
+	t=0
 	
 	tput cup $(($margin)) $(($margin))
 	echo "Last updated: $timestamp"
@@ -121,6 +167,7 @@ do
 		line=`awk -v i=$i 'NR==i' < lines_status.txt`
 		status=`awk -v i=$((i + 1)) 'NR==i' < lines_status.txt`
 		write_info
+		lines[fKey]=$line
 
 		current_col=$(($current_col + $width_increment))
         	if ! (($current_col + $box_width < $window_width)); 
@@ -135,5 +182,11 @@ do
 
 	# Reset the cursor position
 	tput cup $window_height $window_width
-	sleep 5
+	while [ $t -lt $delay ] && [ $override -eq 0 ]
+	do
+		check_for_keypress
+		t=$((t + 1))
+		sleep 0.001
+	done
+	
 done
