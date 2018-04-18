@@ -1,45 +1,5 @@
-   Planned Work
-   TRACK MAINTENANCE
-   [3] Service operates between 148 St and 34 St-Penn Station
+[LINE INFORMATION FOR 123]
 
-   Nights, 11:45 PM to 5 AM, Mon to Fri, Apr 16 - 20
+No information to report
 
-   Planned Work
-   TRACK MAINTENANCE
-   [2] Flatbush Av-bound trains skip 86, 79, 66, 59 and 50 Sts
-
-   Nights, 12:01 AM to 5 AM, Tue to Fri, Apr 17 - 20
-   For service to these stations, take the [2] to 72 St or Times Sq-42 St
-   and transfer
-   to an uptown [1] or [2] local.
-   For service from these stations, take the [1] or [2] to 72 St or 96 St
-   and transfer
-   to a Flatbush Av-bound [2].
-
-   Planned Work
-   TRACK MAINTENANCE
-   [1] Van Cortlandt Park-bound trains skip Franklin, Canal, Houston,
-   Christopher, 18, 23 and 28 Sts
-
-   Nights, 9:45 PM to 5 AM, Mon to Fri, Apr 16 - 20
-   For service to these stations, take the [1] to 14 St or 34 St-Penn
-   Station and transfer to a
-   downtown [1] or [2] local.
-   For service from these stations, take the [1] or [2] to 14 St or
-   Chambers St and transfer to a
-   Van Cortlandt Park-bound [1].
-
-   Planned Work
-   TRACK MAINTENANCE
-   [1] South Ferry-bound trains skip 86, 79, 66, 59 and 50 Sts
-
-   Nights, 9:45 PM to 5 AM, Mon to Fri, Apr 16 - 20
-   For service to these stations, take the [1] to 72 St or Times Sq-42 St
-   and transfer
-   to an uptown [1] or [2] local.
-   For service from these stations, take the [1] or [2] to 72 St or 96 St
-   and transfer
-   to a South Ferry-bound [1].
-
-
-[PRESS Q TO EXIT]
+[PRESS "q" TO QUIT]
