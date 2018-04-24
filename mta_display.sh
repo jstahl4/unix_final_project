@@ -220,8 +220,8 @@ check_for_keypress() {
 }
 
 # Clear the screen at the start and reset colors for uniformity
-clear
 reset
+clear
 
 # Loop infinitely to display the terminal
 while true
