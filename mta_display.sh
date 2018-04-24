@@ -54,9 +54,6 @@ override=0
 # ...but that hasn't happened in 80 years (minus line extensions)!
 f_key_names=("1" "2" "3" "4" "5" "6" "7" "8" "9" "a" "b" "c")
 
-# Clear the screen at the start
-clear
-
 # Red color function
 red() {
 	tput setab 1; tput setaf 0
@@ -221,6 +218,10 @@ check_for_keypress() {
 		fi
 	fi
 }
+
+# Clear the screen at the start and reset colors for uniformity
+clear
+reset
 
 # Loop infinitely to display the terminal
 while true
