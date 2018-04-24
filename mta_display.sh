@@ -52,7 +52,7 @@ override=0
 # A list of function keys to view more info per train line
 # Has more than enough values in case of future line additions
 # ...but that hasn't happened in 80 years (minus line extensions)!
-fKeyNames=("1" "2" "3" "4" "5" "6" "7" "8" "9" "a" "b" "c")
+f_key_names=("1" "2" "3" "4" "5" "6" "7" "8" "9" "a" "b" "c")
 
 # Clear the screen at the start
 clear
@@ -136,7 +136,7 @@ write_info() {
 	# Output all info
 	output "$line"
 	output "$status"
-	output "Press \"${fKeyNames[$fKeyIndex]}\" for more info"
+	output "Press \"${f_key_names[$f_key_index]}\" for more info"
 
 	# Reset background
 	reset
@@ -162,9 +162,9 @@ check_for_keypress() {
 		# Loop through the saved function key names and see if one of them was pressed
 		line="-1"
 		j=0
-		for keyName in "${fKeyNames[@]}"
+		for key_name in "${f_key_names[@]}"
 		do
-			if [[ "$keyName" == "$input" ]]
+			if [[ "$key_name" == "$input" ]]
 			then
 
 				# A key has been pressed corresponding to a specific line
@@ -245,7 +245,7 @@ do
 	cat subways.txt | grep "<line>" -A 2 | cut -d ">" -f2 | cut -d "<" -f1 | grep '\S' | grep -v "^--$" > lines_status.txt
 
 	# Reset fKeyIndex, correspoding to the function key label's index and the train line's index
-	fKeyIndex=0
+	f_key_index=0
 
 	# Reset i to 1 since awk indexing starts at 1 which is awkward (looking at you, MatLab)
 	i=1
@@ -273,7 +273,7 @@ do
 		write_info
 
 		# Match the train line to an arbitrary function key index
-		lines[fKeyIndex]=$line
+		lines[f_key_index]=$line
 
 		# Determine the current column and row
 		current_col=$(($current_col + $width_increment))
@@ -287,7 +287,7 @@ do
 		i=$((i + 2))
 
 		# Increment the function key index
-		fKeyIndex=$((fKeyIndex + 1))
+		f_key_index=$((f_key_index + 1))
 	done
 
 	# Reset the cursor position
