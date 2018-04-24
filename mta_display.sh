@@ -29,8 +29,8 @@ reset() {
 	tput setab 0; tput setaf 7;
 }
 
-# how long to pause for between checks, in centiseconds because ???
-delay=500
+# how long to pause for between checks, in second
+delay=5
 
 # box array dimensions
 num_box_rows=3
@@ -281,16 +281,17 @@ do
 	tput cup $window_height $window_width
 
 	# check for a keypress at the end of the display
-	while [ $t -lt $delay ] && [ $override -eq 0 ]
+	endDate=$((`date +%s` + $delay))
+	while [[ `date +%s` -lt $endDate ]] && [ $override -eq 0 ]
 	do
-
-		# do the checking
-		check_for_keypress
 
 		# increment time by 1
 		t=$((t + 1))
 
-		# this is off by a magnitude of 10 but it works so
+		# do the checking
+		check_for_keypress
+
+		# sleep for 1 pseduo-m
 		sleep 0.001
 	done
 
